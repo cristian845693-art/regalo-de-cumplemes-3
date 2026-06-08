@@ -26,15 +26,17 @@
             justify-content: center;
         }
 
-        /* --- MARCA DE AGUA --- */
+        /* --- MARCA DE AGUA (FONDO PARA COMPUTADOR) --- */
         body::before {
             content: "";
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('img/idea3.jfif');
+            /* IMAGEN HORIZONTAL PARA PC */
+            background-image: url('img/fondo-pc.jpg');
             background-size: cover; 
-            background-position: center;
-            opacity: 0.15; 
+            background-position: center center;
+            background-repeat: no-repeat;
+            opacity: 0.15; /* Ajusta la transparencia aquí */
             z-index: -1;
             pointer-events: none;
         }
@@ -166,7 +168,7 @@
             width: 95%;
             max-width: 800px;
             text-align: center;
-            pointer-events: none; /* Evita que el contenedor invisible bloquee clics */
+            pointer-events: none;
         }
         
         #time-sector h2 {
@@ -179,7 +181,7 @@
 
         #folders-container {
             display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;
-            pointer-events: auto; /* Reactiva los clics en las carpetas */
+            pointer-events: auto;
         }
 
         .folder {
@@ -285,7 +287,15 @@
         .letter img { display: block; margin: 0 auto 10px; width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-fondo); }
         .letter p { font-size: 12px; color: #555; line-height: 1.5; text-align: justify; margin: 0; }
 
+        /* --- AJUSTES PARA TELÉFONOS MÓVILES --- */
         @media (max-width: 768px) {
+            
+            /* --- MARCA DE AGUA (FONDO PARA CELULAR) --- */
+            body::before {
+                /* IMAGEN VERTICAL PARA CELULAR */
+                background-image: url('img/fondo-celular.jpg');
+            }
+
             .envelopes-container { flex-direction: column; gap: 70px; transform: translate(-50%, -40%) scale(0.65); }
             #time-sector { top: 60px; }
             #time-sector h2 { font-size: 26px; margin-bottom: 5px; }
@@ -308,6 +318,7 @@
         <div id="timer-meet" style="margin-top: 5px; border-top: 1px solid #ccc; font-size: 11px; color: #888;">Cargando encuentro...</div>
     </div>
 
+    <!-- Columna de Fotos Aleatorias Widget (Polaroids) -->
     <div id="polaroid-container" title="Nuestros recuerdos ❤️">
         <div class="random-photo-widget"><img class="random-img" id="random-img-1" src="" alt="Recuerdo"></div>
         <div class="random-photo-widget"><img class="random-img" id="random-img-2" src="" alt="Recuerdo"></div>
@@ -326,23 +337,27 @@
         <button class="music-btn" id="btn-play" onclick="toggleMusic()" title="Reproducir/Pausar">🎵</button>
     </div>
 
+    <!-- Sector del Tiempo -->
     <div id="time-sector">
         <h2>Sector del tiempo</h2>
         <div id="folders-container"></div>
     </div>
 
+    <!-- Modal de Carpetas -->
     <div id="photo-modal">
         <span class="close-btn" onclick="cerrarModal()">&times;</span>
         <h2 id="modal-title"></h2>
         <div id="modal-gallery"></div>
     </div>
 
+    <!-- Visor Pantalla Completa -->
     <div id="fullscreen-viewer" onclick="cerrarFullscreen()">
         <img id="fullscreen-img" src="" alt="Vista completa">
     </div>
 
     <div class="envelopes-container">
         
+        <!-- CARTA 1 -->
         <div class="envelope-wrapper" id="envelope1" onclick="manejarApertura('envelope1')">
             <div class="envelope-date">07/02/2026</div>
             <div class="envelope-front"></div>
@@ -369,6 +384,7 @@
             </div>
         </div>
 
+        <!-- CARTA 2 -->
         <div class="envelope-wrapper" id="envelope2" onclick="manejarApertura('envelope2')">
             <div class="envelope-date">07/04/2026</div>
             <div class="envelope-front"></div>
@@ -388,6 +404,7 @@
             </div>
         </div>
 
+        <!-- CARTA 3 -->
         <div class="envelope-wrapper" id="envelope3" onclick="manejarApertura('envelope3')">
             <div class="envelope-date">07/06/2026</div>
             <div class="envelope-front"></div>
@@ -397,34 +414,13 @@
                     <h3 style="text-align: center; font-family: 'Dancing Script', cursive; font-size: 18px; color: var(--color-tapa); margin: 0 0 8px 0;">Nuestro 7 de Junio</h3>
                     <p>
                         <b>Mi niña hermosa, <span class="name-style">Justine</span> ❤️</b><br><br>
-
-                        Hola mi amor, obviamente no te iba a dejar sin actualización... fue una semana complicada y te pido perdón por ser un bruto
-                        pero te escribo esto para hacerte saber todo lo que te amo. <br><br>
-                        
-                        Justine mi amor, te agradezco por estar en mi vida, valoro mucho el amor que me entregas día a día, tu sonrisa tan hermosa que me regalas cada vez que ríes,
-                        la cual genuinamente me da un abrazo en el corazón. Los días simples que estamos regaloneando en la casa acostados, estos días calientitos en donde nos amamos, que estamos abrazados
-                        mirandonos a los ojos, dandonos besos, momentos que quiero que sean eternos... estos días son 
-                        invaluables, son días que no voy a olvidar nunca y que no los cambiaría por nada. <br><br>
-                        
-                        Por otro lado en estos meses que hemos vivido, te he demostrado también que soy un humano con sus errores y lamentos, pero mi amor le pido a Dios siempre que me de la fuerza para
-                        ser el hombre que mereces, y que nos de paz y tranquilidad para resolver nuestros problemas, de esto último estoy orgulloso, por que a pesar de todas las trubulencias que 
-                        hemos encontrado, aún así nuestro amor siempre gana por sobre todo, creo que es algo que tenemos que reconocer y seguir trabajandolo, que nuestro amor y cariño nunca se desgaste... Quiero que a pesar
-                        de las lagrimas y los malos ratos tu sonrisa nunca se apague.<br><br>
-                        
-                        Por esto y muchas razones mas Justine quiero decirte que eres mi tesero, eres lo mas preciado que tengo en mi vida, quiero que tu ternura, tu sinceridad, tu risa, tus ojos, tus manitos, tus labios, 
-                        tu sonrisa tan genuina, tu luz y tu hermosa forma de ser me acompañe para toda la vida. Mi amor, eres todo lo bueno que se puede pedir de la vida, porfavor
-                        no cambies...<br><br>
-                        
-                        Por su puesto mi amor ya son cinco meses, es increible como pasa el tiempo y como de a poco nuestros primeros meses son anecdotas que recordamos con mucho cariño, hemos evolucionado mucho como pareja
-                        de apoco nos hemos conocido más y hemos aprendido a amarnos mejor, cada vez avanzamos mas en esta
-                        linda historia. Que decirte... todo este tiempo ha sido increible y no podría estar mas feliz de estar contigo, te agradezco una y mil veces por tu compañía. Me emociona saber que nos quedan
-                        muchos más momentos como estos y que nuestro viaje esta recién comenzando❤️.
-                
+                        [Escribe aquí tu mensaje sobre los 5 meses y su especial 7 de junio...]<br><br>
+                        Ya son cinco meses increíbles a tu lado y no podría estar más feliz. Gracias por cada momento juntos.<br><br>
                         <span style="display: block; text-align: center;">
                             <b>Te amo muchísimo <br> <span class="name-style">Justine</span> ❤️</b>
                         </span>
                         <br>
-                        <span style="display: block; font-size: 11px; color: #aaa; text-align: center;">(Con muchísimo amor (como siempre), Cristian...)</span>
+                        <span style="display: block; font-size: 11px; color: #aaa; text-align: center;">(Con amor, Cristian.)</span>
                     </p>
                 </div>
             </div>
