@@ -133,33 +133,53 @@
             color: var(--color-tapa); border-left: 3px solid var(--color-tapa);
         }
 
-        /* --- FOTO ALEATORIA (WIDGET ESQUINA) --- */
-        #random-photo-widget {
-            position: fixed; bottom: 20px; left: 20px; width: 140px; height: 140px;
+        /* --- COLUMNA DE FOTOS ALEATORIAS (POLAROIDS) --- */
+        #polaroid-container {
+            position: fixed; bottom: 20px; left: 20px; 
+            display: flex; flex-direction: column; gap: 15px; 
+            z-index: 5000;
+        }
+        .random-photo-widget {
+            width: 140px; height: 140px;
             background: white; padding: 5px 5px 15px 5px;
             border-radius: 4px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 5000; overflow: hidden; transform: rotate(-3deg);
-            transition: transform 0.3s;
+            overflow: hidden; transition: transform 0.3s, z-index 0s;
+            position: relative;
         }
-        #random-photo-widget:hover { transform: scale(1.1) rotate(0deg); }
-        #random-img {
+        .random-photo-widget:nth-child(1) { transform: rotate(-3deg); }
+        .random-photo-widget:nth-child(2) { transform: rotate(2deg); }
+        .random-photo-widget:nth-child(3) { transform: rotate(-1deg); }
+        .random-photo-widget:hover { transform: scale(1.1) rotate(0deg); z-index: 10; }
+        
+        .random-img {
             width: 100%; height: 100%; object-fit: cover; border-radius: 2px;
             transition: opacity 1s ease-in-out;
         }
 
-        /* --- CARPETAS DE FOTOS --- */
-        #folders-container {
+        /* --- SECTOR DEL TIEMPO (TÍTULO Y CARPETAS) --- */
+        #time-sector {
             position: fixed;
-            top: 90px;
+            top: 75px;
             left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
             z-index: 1000;
             width: 95%;
             max-width: 800px;
+            text-align: center;
+            pointer-events: none; /* Evita que el contenedor invisible bloquee clics */
+        }
+        
+        #time-sector h2 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--color-tapa);
+            font-size: 32px;
+            margin: 0 0 10px 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        #folders-container {
+            display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;
+            pointer-events: auto; /* Reactiva los clics en las carpetas */
         }
 
         .folder {
@@ -267,11 +287,13 @@
 
         @media (max-width: 768px) {
             .envelopes-container { flex-direction: column; gap: 70px; transform: translate(-50%, -40%) scale(0.65); }
-            #folders-container { top: 75px; width: 100%; gap: 10px; }
+            #time-sector { top: 60px; }
+            #time-sector h2 { font-size: 26px; margin-bottom: 5px; }
             .folder { width: 90px; padding: 10px; }
             #main-dedication { top: auto; bottom: 120px; font-size: 26px; }
             #playlist-panel { right: 20px; width: 220px; }
-            #random-photo-widget { width: 100px; height: 100px; bottom: 10px; left: 10px; }
+            #polaroid-container { left: 10px; bottom: 10px; gap: 8px; }
+            .random-photo-widget { width: 85px; height: 85px; padding: 3px 3px 10px 3px; }
         }
 
         .confetti { position: fixed; width: 6px; height: 6px; z-index: 7000; border-radius: 50%; pointer-events: none; }
@@ -286,9 +308,10 @@
         <div id="timer-meet" style="margin-top: 5px; border-top: 1px solid #ccc; font-size: 11px; color: #888;">Cargando encuentro...</div>
     </div>
 
-    <!-- Foto Aleatoria Widget -->
-    <div id="random-photo-widget" title="Nuestros recuerdos ❤️">
-        <img id="random-img" src="" alt="Recuerdo aleatorio">
+    <div id="polaroid-container" title="Nuestros recuerdos ❤️">
+        <div class="random-photo-widget"><img class="random-img" id="random-img-1" src="" alt="Recuerdo"></div>
+        <div class="random-photo-widget"><img class="random-img" id="random-img-2" src="" alt="Recuerdo"></div>
+        <div class="random-photo-widget"><img class="random-img" id="random-img-3" src="" alt="Recuerdo"></div>
     </div>
 
     <div id="playlist-panel">
@@ -303,23 +326,23 @@
         <button class="music-btn" id="btn-play" onclick="toggleMusic()" title="Reproducir/Pausar">🎵</button>
     </div>
 
-    <div id="folders-container"></div>
+    <div id="time-sector">
+        <h2>Sector del tiempo</h2>
+        <div id="folders-container"></div>
+    </div>
 
-    <!-- Modal de Carpetas -->
     <div id="photo-modal">
         <span class="close-btn" onclick="cerrarModal()">&times;</span>
         <h2 id="modal-title"></h2>
         <div id="modal-gallery"></div>
     </div>
 
-    <!-- Visor Pantalla Completa -->
     <div id="fullscreen-viewer" onclick="cerrarFullscreen()">
         <img id="fullscreen-img" src="" alt="Vista completa">
     </div>
 
     <div class="envelopes-container">
         
-        <!-- CARTA 1 -->
         <div class="envelope-wrapper" id="envelope1" onclick="manejarApertura('envelope1')">
             <div class="envelope-date">07/02/2026</div>
             <div class="envelope-front"></div>
@@ -346,7 +369,6 @@
             </div>
         </div>
 
-        <!-- CARTA 2 -->
         <div class="envelope-wrapper" id="envelope2" onclick="manejarApertura('envelope2')">
             <div class="envelope-date">07/04/2026</div>
             <div class="envelope-front"></div>
@@ -366,7 +388,6 @@
             </div>
         </div>
 
-        <!-- CARTA 3 (NUEVA) -->
         <div class="envelope-wrapper" id="envelope3" onclick="manejarApertura('envelope3')">
             <div class="envelope-date">07/06/2026</div>
             <div class="envelope-front"></div>
@@ -454,26 +475,31 @@
         const btnPlay = document.getElementById('btn-play');
         const songTitleDisplay = document.getElementById('song-title');
 
-        // --- LÓGICA DE FOTO ALEATORIA ---
+        // --- LÓGICA DE FOTOS ALEATORIAS (POLAROIDS) ---
         let allPhotos = [];
         for (let folder in fotosPorFecha) {
             allPhotos = allPhotos.concat(fotosPorFecha[folder]);
         }
 
         function cambiarFotoAleatoria(primeraVez = false) {
-            if(allPhotos.length === 0) return;
-            const randomImg = document.getElementById('random-img');
-            const randomIndex = Math.floor(Math.random() * allPhotos.length);
+            if(allPhotos.length < 3) return; // Asegura que hayan suficientes fotos
             
-            if (primeraVez) {
-                randomImg.src = `img/${allPhotos[randomIndex]}`;
-            } else {
-                randomImg.style.opacity = 0;
-                setTimeout(() => {
+            const idsImgs = ['random-img-1', 'random-img-2', 'random-img-3'];
+            
+            idsImgs.forEach((id) => {
+                const randomImg = document.getElementById(id);
+                const randomIndex = Math.floor(Math.random() * allPhotos.length);
+                
+                if (primeraVez) {
                     randomImg.src = `img/${allPhotos[randomIndex]}`;
-                    randomImg.style.opacity = 1;
-                }, 1000); // Espera a que termine el fade-out
-            }
+                } else {
+                    randomImg.style.opacity = 0;
+                    setTimeout(() => {
+                        randomImg.src = `img/${allPhotos[randomIndex]}`;
+                        randomImg.style.opacity = 1;
+                    }, 1000); // Sincroniza con la transición en CSS
+                }
+            });
         }
 
         // --- FUNCIONES DE PLAYLIST ---
@@ -645,7 +671,7 @@
             inicializarPlaylist(); 
             loadSong(0); 
             
-            // Foto aleatoria inicial y luego cada 15 segundos
+            // Fotos aleatorias iniciales y luego cada 15 segundos
             cambiarFotoAleatoria(true);
             setInterval(() => cambiarFotoAleatoria(false), 15000);
 
