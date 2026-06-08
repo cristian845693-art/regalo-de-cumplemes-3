@@ -26,6 +26,23 @@
             justify-content: center;
         }
 
+        /* --- MARCA DE AGUA DE CRISANTEMOS ROSADOS --- */
+        /* Asegúrate de tener una imagen llamada 'crisantemos.png' en tu carpeta img */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background-image: url('img/crisantemos.png');
+            background-size: cover; /* Cambia a 'contain' o 'repeat' si es un patrón pequeño */
+            background-position: center;
+            opacity: 0.15; /* Ajusta la transparencia aquí (0.1 = muy transparente, 1 = sin transparencia) */
+            z-index: -1;
+            pointer-events: none;
+        }
+
         /* --- DEDICATORIA PRINCIPAL --- */
         #main-dedication {
             position: fixed;
@@ -76,6 +93,7 @@
             border-radius: 50px;
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
         }
         #timer { font-weight: 600; color: #444; font-size: 13px; }
 
@@ -95,7 +113,7 @@
         #song-title {
             background: rgba(255, 255, 255, 0.9); padding: 5px 12px; border-radius: 10px; 
             font-size: 10px; color: var(--color-tapa); font-weight: bold; display: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; max-width: 150px;
         }
 
         #playlist-panel {
@@ -119,32 +137,91 @@
             color: var(--color-tapa); border-left: 3px solid var(--color-tapa);
         }
 
-        /* --- GALERÍA --- */
-        #gallery-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(5, 1fr);
-            padding: 25px; box-sizing: border-box; pointer-events: none;
+        /* --- CARPETAS DE FOTOS (NUEVO ORDENAMIENTO) --- */
+        #folders-container {
+            position: fixed;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 1000;
+            width: 90%;
+            max-width: 600px;
         }
-        .photo-slot { display: flex; align-items: center; justify-content: center; }
-        .photo {
-            width: 110px; background: white; padding: 5px 5px 15px 5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer; z-index: 5; pointer-events: auto;
-            animation: floating 6s infinite ease-in-out;
+
+        .folder {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 120px;
+            backdrop-filter: blur(5px);
+            border: 2px solid transparent;
         }
-        .photo img { width: 100%; height: 95px; object-fit: cover; border-radius: 2px; }
+
+        .folder:hover { 
+            transform: scale(1.08) translateY(-5px); 
+            border-color: var(--color-sobre);
+        }
+
+        .folder-icon { font-size: 45px; margin-bottom: 8px; line-height: 1; }
+        .folder-title { font-size: 13px; font-weight: bold; color: var(--color-tapa); }
+
+        /* --- MODAL DE GALERÍA (AL HACER CLIC EN LA CARPETA) --- */
+        #photo-modal {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            z-index: 9999; align-items: center; justify-content: center;
+            flex-direction: column;
+        }
         
-        .photo:hover {
-            animation: none !important; z-index: 6000 !important;
-            transform: scale(2.5) rotate(0deg) translate3d(0,0,0) !important; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+        #photo-modal .close-btn {
+            position: absolute; top: 20px; right: 30px;
+            color: white; font-size: 40px; cursor: pointer; font-weight: bold;
+            transition: color 0.2s;
         }
+        #photo-modal .close-btn:hover { color: var(--color-tapa); }
+
+        #modal-title {
+            color: var(--color-carta);
+            font-family: 'Dancing Script', cursive;
+            font-size: 35px;
+            margin-bottom: 20px;
+            margin-top: 40px;
+        }
+
+        #modal-gallery {
+            display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;
+            width: 90%; max-width: 900px; max-height: 70vh; overflow-y: auto; padding: 10px;
+        }
+
+        #modal-gallery::-webkit-scrollbar { width: 8px; }
+        #modal-gallery::-webkit-scrollbar-thumb { background: var(--color-tapa); border-radius: 10px; }
+
+        .modal-photo {
+            width: 140px; height: 140px;
+            background: white; padding: 5px 5px 15px 5px;
+            border-radius: 4px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease; cursor: pointer;
+        }
+
+        .modal-photo img {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 2px;
+        }
+
+        .modal-photo:hover { transform: scale(1.8); z-index: 10; position: relative; }
 
         /* --- CONTENEDOR DE SOBRES --- */
         .envelopes-container {
             display: flex; gap: 50px; justify-content: center; align-items: center;
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;
+            position: fixed; top: 55%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;
         }
 
         .envelope-wrapper {
@@ -192,17 +269,12 @@
         .letter p { font-size: 12px; color: #555; line-height: 1.5; text-align: justify; margin: 0; }
 
         @media (max-width: 768px) {
-            .envelopes-container { flex-direction: column; gap: 80px; transform: translate(-50%, -55%) scale(0.8); }
-            #gallery-container { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(12, 1fr); height: 250vh; padding: 100px 20px; gap: 25px; }
-            .photo { width: 130px; } .photo img { height: 110px; }
+            .envelopes-container { flex-direction: column; gap: 80px; transform: translate(-50%, -40%) scale(0.8); }
+            #folders-container { top: 75px; width: 100%; gap: 10px; }
+            .folder { width: 100px; padding: 10px; }
             #main-dedication { top: auto; bottom: 120px; font-size: 26px; }
             #playlist-panel { right: 20px; width: 220px; }
-        }
-
-        @keyframes floating {
-            0% { transform: translateY(0px) rotate(var(--r)); }
-            50% { transform: translateY(-12px) rotate(calc(var(--r) + 2deg)); }
-            100% { transform: translateY(0px) rotate(var(--r)); }
+            .modal-photo:hover { transform: scale(1.3); } /* En móviles no queremos que se agrande tanto */
         }
 
         .confetti { position: fixed; width: 6px; height: 6px; z-index: 7000; border-radius: 50%; pointer-events: none; }
@@ -214,7 +286,7 @@
 
     <div id="timer-container">
         <div id="timer">Cargando nuestro tiempo...</div>
-        <div id="timer-meet" style="margin-top: 5px; border-top: 1px solid #eee; pt-2; font-size: 11px; color: #888;">Cargando encuentro...</div>
+        <div id="timer-meet" style="margin-top: 5px; border-top: 1px solid #ccc; font-size: 11px; color: #888;">Cargando encuentro...</div>
     </div>
 
     <div id="playlist-panel">
@@ -229,7 +301,13 @@
         <button class="music-btn" id="btn-play" onclick="toggleMusic()" title="Reproducir/Pausar">🎵</button>
     </div>
 
-    <div id="gallery-container"></div>
+    <div id="folders-container"></div>
+
+    <div id="photo-modal">
+        <span class="close-btn" onclick="cerrarModal()">&times;</span>
+        <h2 id="modal-title"></h2>
+        <div id="modal-gallery"></div>
+    </div>
 
     <div class="envelopes-container">
         <div class="envelope-wrapper" id="envelope1" onclick="manejarApertura('envelope1')">
@@ -284,41 +362,46 @@
         const startDate = new Date(2026, 0, 7, 0, 0); 
         const meetDate = new Date(2025, 9, 31, 0, 0);
         
-        const misFotos = [
-            "foto1.jpeg", "foto2.jpeg", "foto3.jpeg", "foto4.jpeg",
-            "foto5.jpeg", "foto6.jpeg", "foto7.jpeg", "foto8.jpeg",
-            "foto9.jpeg", "foto12.jpeg", "foto13.jpeg", "foto14.jpeg",
-            "foto15.jpeg", "foto16.jpeg", "foto17.jpeg", "foto18.jpeg",
-            "foto19.jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.53.jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.54 (1).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.54 (2).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.54 (3).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.54.jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.55 (1).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.55 (2).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.55 (3).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.55 (4).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.55.jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.56 (1).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.56 (2).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.56 (3).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.56 (4).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.56 (5).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.56.jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.57 (1).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.57 (2).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.57 (3).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.57 (4).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.57.jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.58 (1).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.58 (2).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.58 (3).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.58 (4).jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.58.jpeg",
-            "WhatsApp Image 2026-04-07 at 01.24.59.jpeg",
-            "WhatsApp Image 2026-04-07 at 01.25.17.jpeg"
-        ];
+        // --- NUEVO SISTEMA DE FOTOS POR CARPETAS ---
+        const fotosPorFecha = {
+            "Primeros Recuerdos": [
+                "foto1.jpeg", "foto2.jpeg", "foto3.jpeg", "foto4.jpeg",
+                "foto5.jpeg", "foto6.jpeg", "foto7.jpeg", "foto8.jpeg",
+                "foto9.jpeg", "foto12.jpeg", "foto13.jpeg", "foto14.jpeg",
+                "foto15.jpeg", "foto16.jpeg", "foto17.jpeg", "foto18.jpeg",
+                "foto19.jpeg"
+            ],
+            "Tres Meses (07 de Abril)": [
+                "WhatsApp Image 2026-04-07 at 01.24.53.jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.54 (1).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.54 (2).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.54 (3).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.54.jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.55 (1).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.55 (2).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.55 (3).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.55 (4).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.55.jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.56 (1).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.56 (2).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.56 (3).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.56 (4).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.56 (5).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.56.jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.57 (1).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.57 (2).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.57 (3).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.57 (4).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.57.jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.58 (1).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.58 (2).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.58 (3).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.58 (4).jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.58.jpeg",
+                "WhatsApp Image 2026-04-07 at 01.24.59.jpeg",
+                "WhatsApp Image 2026-04-07 at 01.25.17.jpeg"
+            ]
+        };
 
         const playlist = [
             { title: "Hailey - Justin Bieber", src: "audio/Justin Bieber - Hailey (SPOTISAVER).mp3" },
@@ -403,35 +486,47 @@
 
         player.addEventListener('ended', nextSong);
 
-        function generarGaleria() {
-            const container = document.getElementById('gallery-container');
-            const isMobile = window.innerWidth <= 768;
+        // --- FUNCIONES DE LAS CARPETAS Y EL MODAL ---
+        function generarCarpetas() {
+            const container = document.getElementById('folders-container');
+            container.innerHTML = '';
             
-            const excludedMobile = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15]; 
-            const excludedPC = [9, 10, 11, 16, 17, 18, 23, 24, 25, 30, 31, 32];
-            const excluded = isMobile ? excludedMobile : excludedPC;
-            
-            const totalCells = isMobile ? 60 : 70;
-            if (isMobile) container.style.height = "250vh";
-
-            let photoIndex = 0;
-            for (let i = 0; i < totalCells; i++) {
-                const slot = document.createElement('div');
-                slot.className = 'photo-slot';
-                if (!excluded.includes(i) && photoIndex < misFotos.length) {
-                    const photo = document.createElement('div');
-                    photo.className = 'photo';
-                    const r = (Math.random() * 10) - 5;
-                    photo.style.setProperty('--r', r + 'deg');
-                    photo.style.animationDelay = (Math.random() * 5) + 's';
-                    photo.innerHTML = `<img src="img/${misFotos[photoIndex]}" alt="Nuestros recuerdos">`;
-                    slot.appendChild(photo);
-                    photoIndex++;
-                }
-                container.appendChild(slot);
+            for (let folderName in fotosPorFecha) {
+                const folderDiv = document.createElement('div');
+                folderDiv.className = 'folder';
+                folderDiv.onclick = () => abrirModal(folderName);
+                
+                folderDiv.innerHTML = `
+                    <div class="folder-icon">🗂️</div>
+                    <div class="folder-title">${folderName}</div>
+                `;
+                container.appendChild(folderDiv);
             }
         }
 
+        function abrirModal(folderName) {
+            const modal = document.getElementById('photo-modal');
+            const title = document.getElementById('modal-title');
+            const gallery = document.getElementById('modal-gallery');
+            
+            title.innerText = folderName;
+            gallery.innerHTML = ''; // Limpiamos las fotos anteriores
+            
+            fotosPorFecha[folderName].forEach(foto => {
+                const photoDiv = document.createElement('div');
+                photoDiv.className = 'modal-photo';
+                photoDiv.innerHTML = `<img src="img/${foto}" alt="Recuerdo de ${folderName}">`;
+                gallery.appendChild(photoDiv);
+            });
+            
+            modal.style.display = 'flex';
+        }
+
+        function cerrarModal() {
+            document.getElementById('photo-modal').style.display = 'none';
+        }
+
+        // --- TIEMPO Y CORAZONES ---
         function updateTimer() {
             const now = new Date();
             const getDiff = (targetDate) => {
@@ -487,7 +582,7 @@
         }
 
         window.onload = () => {
-            generarGaleria();
+            generarCarpetas();
             inicializarPlaylist(); 
             loadSong(0); 
             setInterval(updateTimer, 1000);
